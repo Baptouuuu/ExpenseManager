@@ -1,0 +1,26 @@
+{
+    "name": "baptouuuu/expense-manager",
+    "type": "project",
+    "description": "Domain to handle personal expenses",
+    "keywords": ["ddd", "expense", "manager"],
+    "homepage": "http://github.com/Baptouuuu/ExpenseManager",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Baptiste Langlade",
+            "email": "langlade.baptiste@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "http://github.com/Baptouuuu/ExpenseManager/issues"
+    },
+    "require": {
+        "php": "~7.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "ExpenseManager": ""
+        }
+    },
+    "target-dir": "ExpenseManager"
+}
