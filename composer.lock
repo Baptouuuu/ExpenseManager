@@ -4,9 +4,95 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d7d8eea019709bc65ca0db5d170b0577",
-    "content-hash": "6ea5889c0ef5209ac863724e370de626",
-    "packages": [],
+    "hash": "d4da6970b16e872957aac20d3bad750e",
+    "content-hash": "93ddc19e24cb334e800a90910a0293ad",
+    "packages": [
+        {
+            "name": "innmind/event-bus",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Innmind/EventBus.git",
+                "reference": "91d471f0219db0015a2bbd2449e350ab597b03ea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Innmind/EventBus/zipball/91d471f0219db0015a2bbd2449e350ab597b03ea",
+                "reference": "91d471f0219db0015a2bbd2449e350ab597b03ea",
+                "shasum": ""
+            },
+            "require": {
+                "innmind/immutable": "^1.8",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Innmind\\EventBus\\": "src/",
+                    "Tests\\Innmind\\EventBus\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Baptiste Langlade",
+                    "email": "langlade.baptiste@gmail.com"
+                }
+            ],
+            "description": "Event dispatcher library",
+            "homepage": "http://github.com/Innmind/EventBus",
+            "keywords": [
+                "dispatcher",
+                "event"
+            ],
+            "time": "2016-06-18 14:20:24"
+        },
+        {
+            "name": "innmind/immutable",
+            "version": "1.9.0",
+            "target-dir": "Innmind/Immutable",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Innmind/Immutable.git",
+                "reference": "023ec3e2ffaa16a6966588b25e1dd7de5679778f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Innmind/Immutable/zipball/023ec3e2ffaa16a6966588b25e1dd7de5679778f",
+                "reference": "023ec3e2ffaa16a6966588b25e1dd7de5679778f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Innmind\\Immutable": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Baptiste Langlade",
+                    "email": "langlade.baptiste@gmail.com"
+                }
+            ],
+            "description": "Immutable PHP primitive wrappers",
+            "homepage": "http://github.com/Innmind/Immutable",
+            "keywords": [
+                "immutable",
+                "wrapper"
+            ],
+            "time": "2016-07-15 12:23:56"
+        }
+    ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
