@@ -7,6 +7,7 @@ use ExpenseManager\{
     Command\CreateFixedCost,
     Handler\CreateFixedCostHandler,
     Repository\FixedCostRepositoryInterface,
+    Repository\CategoryRepositoryInterface,
     Entity\FixedCost,
     Entity\FixedCost\IdentityInterface,
     Entity\Category\IdentityInterface as Category
@@ -17,7 +18,8 @@ class CreateFixedCostHandlerTest extends \PHPUnit_Framework_TestCase
     public function testInterface()
     {
         $handler = new CreateFixedCosthandler(
-            $repo = $this->createMock(FixedCostRepositoryInterface::class)
+            $repo = $this->createMock(FixedCostRepositoryInterface::class),
+            $categoryRepo = $this->createMock(CategoryRepositoryInterface::class)
         );
         $called = false;
         $identity = $this->createMock(IdentityInterface::class);
@@ -35,6 +37,9 @@ class CreateFixedCostHandlerTest extends \PHPUnit_Framework_TestCase
 
                 return $repo;
             }));
+        $categoryRepo
+            ->method('has')
+            ->willReturn(true);
 
         $this->assertNull($handler(
             new CreateFixedCost(
@@ -46,5 +51,31 @@ class CreateFixedCostHandlerTest extends \PHPUnit_Framework_TestCase
             )
         ));
         $this->assertTrue($called);
+    }
+
+    /**
+     * @expectedException ExpenseManager\Exception\CantUseUnknownCategoryException
+     */
+    public function testThrowWhenUsingUnknownCategory()
+    {
+        $handler = new CreateFixedCosthandler(
+            $repo = $this->createMock(FixedCostRepositoryInterface::class),
+            $categoryRepo = $this->createMock(CategoryRepositoryInterface::class)
+        );
+        $identity = $this->createMock(IdentityInterface::class);
+        $category = $this->createMock(Category::class);
+        $categoryRepo
+            ->method('has')
+            ->willReturn(false);
+
+        $handler(
+            new CreateFixedCost(
+                $identity,
+                'foo',
+                42,
+                24,
+                $category
+            )
+        );
     }
 }

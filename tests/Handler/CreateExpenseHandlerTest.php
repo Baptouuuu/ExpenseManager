@@ -7,6 +7,7 @@ use ExpenseManager\{
     Command\CreateExpense,
     Handler\CreateExpenseHandler,
     Repository\ExpenseRepositoryInterface,
+    Repository\CategoryRepositoryInterface,
     Entity\Expense,
     Entity\Expense\IdentityInterface,
     Entity\Category\IdentityInterface as Category
@@ -17,7 +18,8 @@ class CreateExpenseHandlerTest extends \PHPUnit_Framework_TestCase
     public function testInterface()
     {
         $handler = new CreateExpenseHandler(
-            $repo = $this->createMock(ExpenseRepositoryInterface::class)
+            $repo = $this->createMock(ExpenseRepositoryInterface::class),
+            $categoryRepo = $this->createMock(CategoryRepositoryInterface::class)
         );
         $called = false;
         $identity = $this->createMock(IdentityInterface::class);
@@ -33,6 +35,9 @@ class CreateExpenseHandlerTest extends \PHPUnit_Framework_TestCase
 
                 return $repo;
             }));
+        $categoryRepo
+            ->method('has')
+            ->willReturn(true);
 
         $this->assertNull($handler(
             new CreateExpense(
@@ -43,5 +48,30 @@ class CreateExpenseHandlerTest extends \PHPUnit_Framework_TestCase
             )
         ));
         $this->assertTrue($called);
+    }
+
+    /**
+     * @expectedException ExpenseManager\Exception\CantUseUnknownCategoryException
+     */
+    public function testThrowWhenUsingUnknownCategory()
+    {
+        $handler = new CreateExpenseHandler(
+            $this->createMock(ExpenseRepositoryInterface::class),
+            $categoryRepo = $this->createMock(CategoryRepositoryInterface::class)
+        );
+        $identity = $this->createMock(IdentityInterface::class);
+        $category = $this->createMock(Category::class);
+        $categoryRepo
+            ->method('has')
+            ->willReturn(false);
+
+        $handler(
+            new CreateExpense(
+                $identity,
+                42,
+                $category,
+                '2016-07-14'
+            )
+        );
     }
 }
