@@ -13,7 +13,7 @@ use Innmind\Immutable\SetInterface;
 interface ExpenseRepositoryInterface
 {
     public function add(Expense $expense): self;
-    public function get(IdentityInterface $identity): self;
+    public function get(IdentityInterface $identity): Expense;
     public function has(IdentityInterface $identity): bool;
     public function remove(IdentityInterface $identity): self;
 

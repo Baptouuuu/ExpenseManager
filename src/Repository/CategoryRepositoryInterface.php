@@ -13,7 +13,7 @@ use Innmind\Immutable\SetInterface;
 interface CategoryRepositoryInterface
 {
     public function add(Category $category): self;
-    public function get(IdentityInterface $identity): self;
+    public function get(IdentityInterface $identity): Category;
     public function has(IdentityInterface $identity): bool;
     public function remove(IdentityInterface $identity): self;
 

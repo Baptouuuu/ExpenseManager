@@ -13,7 +13,7 @@ use Innmind\Immutable\SetInterface;
 interface BudgetRepositoryInterface
 {
     public function add(Budget $budget): self;
-    public function get(IdentityInterface $identity): self;
+    public function get(IdentityInterface $identity): Budget;
     public function has(IdentityInterface $identity): bool;
     public function remove(IdentityInterface $identity): self;
 
