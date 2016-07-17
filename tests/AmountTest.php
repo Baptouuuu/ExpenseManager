@@ -48,4 +48,12 @@ class AmountTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(24, $a2->value());
         $this->assertSame(18, $a3->value());
     }
+
+    /**
+     * @expectedException ExpenseManager\Exception\InvalidArgumentException
+     */
+    public function testThrowWhenAmountIsNegative()
+    {
+        new Amount(-42);
+    }
 }
