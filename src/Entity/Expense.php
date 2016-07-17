@@ -80,8 +80,10 @@ final class Expense implements ContainsRecordedEventsInterface
 
     public function specifyNote(string $note): self
     {
-        $this->note = $note;
-        $this->record(new NoteWasSpecified($this->identity, $note));
+        if ($note !== $this->note) {
+            $this->note = $note;
+            $this->record(new NoteWasSpecified($this->identity, $note));
+        }
 
         return $this;
     }

@@ -19,10 +19,9 @@ final class SpecifyExpenseNoteHandler
 
     public function __invoke(SpecifyExpenseNote $wished)
     {
-        $expense = $this->repository->get($wished->identity());
-
-        if ($expense->note() !== $wished->note()) {
-            $expense->specifyNote($wished->note());
-        }
+        $this
+            ->repository
+            ->get($wished->identity())
+            ->specifyNote($wished->note());
     }
 }
