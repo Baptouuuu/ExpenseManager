@@ -13,12 +13,12 @@ trait Composite
 {
     public function and(SpecificationInterface $spec): CompositeInterface
     {
-        return new And($this, $spec);
+        return new AndSpecification($this, $spec);
     }
 
     public function or(SpecificationInterface $spec): CompositeInterface
     {
-        return new Or($this, $spec);
+        return new OrSpecification($this, $spec);
     }
 
     public function not(): NotInterface

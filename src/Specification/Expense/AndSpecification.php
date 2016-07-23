@@ -10,7 +10,7 @@ use Innmind\Specification\{
     SpecificationInterface
 };
 
-final class And implements CompositeInterface
+final class AndSpecification implements CompositeInterface
 {
     use Composite;
 
