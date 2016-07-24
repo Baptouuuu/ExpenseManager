@@ -71,4 +71,17 @@ class ExpenseTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($identity, $event->identity());
         $this->assertSame('foo', $event->note());
     }
+
+    /**
+     * @expectedException ExpenseManager\Exception\InvalidArgumentException
+     */
+    public function testThrowWhenAmountIsNegative()
+    {
+        new Expense(
+            $this->createMock(IdentityInterface::class),
+            new Amount(-4200),
+            $this->createMock(Category::class),
+            new \DateTimeImmutable
+        );
+    }
 }

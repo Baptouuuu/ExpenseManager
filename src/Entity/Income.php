@@ -30,7 +30,7 @@ final class Income implements ContainsRecordedEventsInterface
         Amount $amount,
         ApplyDay $applyDay
     ) {
-        if (empty($name)) {
+        if (empty($name) || $amount->value() < 0) {
             throw new InvalidArgumentException;
         }
 

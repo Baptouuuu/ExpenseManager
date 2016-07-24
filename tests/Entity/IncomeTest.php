@@ -63,4 +63,17 @@ class IncomeTest extends \PHPUnit_Framework_TestCase
             new ApplyDay(24)
         );
     }
+
+    /**
+     * @expectedException ExpenseManager\Exception\InvalidArgumentException
+     */
+    public function testThrowWhenAmountIsNegative()
+    {
+        new Income(
+            $this->createMock(IdentityInterface::class),
+            'foo',
+            new Amount(-42),
+            new ApplyDay(24)
+        );
+    }
 }

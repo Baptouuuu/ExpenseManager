@@ -33,7 +33,7 @@ final class FixedCost implements ContainsRecordedEventsInterface
         ApplyDay $applyDay,
         CategoryIdentityInterface $category
     ) {
-        if (empty($name)) {
+        if (empty($name) || $amount->value() < 0) {
             throw new InvalidArgumentException;
         }
 

@@ -55,4 +55,19 @@ class BudgetTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($amount, $event->amount());
         $this->assertSame($categories, $event->categories());
     }
+
+    /**
+     * @expectedException ExpenseManager\Exception\InvalidArgumentException
+     */
+    public function testThrowWhenAmountIsNegative()
+    {
+        new Budget(
+            $this->createMock(IdentityInterface::class),
+            'foo',
+            new Amount(-100),
+            (new Set(Category::class))->add(
+                $this->createMock(Category::class)
+            )
+        );
+    }
 }

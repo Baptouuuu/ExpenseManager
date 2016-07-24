@@ -11,10 +11,6 @@ final class Amount
 
     public function __construct(int $cents)
     {
-        if ($cents < 0) {
-            throw new InvalidArgumentException;
-        }
-
         $this->cents = $cents;
     }
 

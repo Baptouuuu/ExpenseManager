@@ -7,7 +7,8 @@ use ExpenseManager\{
     Entity\OneOffIncome\IdentityInterface,
     Amount,
     Event\OneOffIncomeWasCreated,
-    Event\OneOffIncome\NoteWasSpecified
+    Event\OneOffIncome\NoteWasSpecified,
+    Exception\InvalidArgumentException
 };
 use Innmind\EventBus\{
     ContainsRecordedEventsInterface,
@@ -28,6 +29,10 @@ final class OneOffIncome implements ContainsRecordedEventsInterface
         Amount $amount,
         \DateTimeImmutable $date
     ) {
+        if ($amount->value() < 0) {
+            throw new InvalidArgumentException;
+        }
+
         $this->identity = $identity;
         $this->amount = $amount;
         $this->date = $date;

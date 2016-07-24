@@ -66,4 +66,16 @@ class OneOffIncomeTest extends \PHPUnit_Framework_TestCase
         $income->specifyNote('foo');
         $this->assertCount(1, $income->recordedEvents());
     }
+
+    /**
+     * @expectedException ExpenseManager\Exception\InvalidArgumentException
+     */
+    public function testThrowWhenAmountIsNegative()
+    {
+        new OneOffIncome(
+            $this->createMock(IdentityInterface::class),
+            new Amount(-42),
+            new \DateTimeImmutable
+        );
+    }
 }

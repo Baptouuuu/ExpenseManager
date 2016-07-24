@@ -7,7 +7,8 @@ use ExpenseManager\{
     Amount,
     Entity\Expense\IdentityInterface,
     Event\ExpenseWasCreated,
-    Event\Expense\NoteWasSpecified
+    Event\Expense\NoteWasSpecified,
+    Exception\InvalidArgumentException
 };
 use Innmind\EventBus\{
     ContainsRecordedEventsInterface,
@@ -30,6 +31,10 @@ final class Expense implements ContainsRecordedEventsInterface
         Category\IdentityInterface $category,
         \DateTimeImmutable $date
     ) {
+        if ($amount->value() < 0) {
+            throw new InvalidArgumentException;
+        }
+
         $this->identity = $identity;
         $this->amount = $amount;
         $this->category = $category;

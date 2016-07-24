@@ -33,7 +33,8 @@ final class Budget implements ContainsRecordedEventsInterface
         if (
             empty($name) ||
             (string) $categories->type() !== Category\IdentityInterface::class ||
-            $categories->size() === 0
+            $categories->size() === 0 ||
+            $amount->value() < 0
         ) {
             throw new InvalidArgumentException;
         }

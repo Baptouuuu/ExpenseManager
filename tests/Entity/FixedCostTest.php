@@ -70,4 +70,18 @@ class FixedCostTest extends \PHPUnit_Framework_TestCase
             $this->createMock(Category::class)
         );
     }
+
+    /**
+     * @expectedException ExpenseManager\Exception\InvalidArgumentException
+     */
+    public function testThrowWhenAmountIsNegative()
+    {
+        new FixedCost(
+            $this->createMock(IdentityInterface::class),
+            'foo',
+            new Amount(-42),
+            new ApplyDay(24),
+            $this->createMock(Category::class)
+        );
+    }
 }
