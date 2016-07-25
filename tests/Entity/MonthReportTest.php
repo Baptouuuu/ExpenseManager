@@ -16,7 +16,8 @@ use ExpenseManager\{
     Entity\Expense,
     Entity\Expense\IdentityInterface as ExpenseIdentityInterface,
     Entity\OneOffIncome,
-    Entity\OneOffIncome\IdentityInterface as OneOffIncomeIdentityInterface
+    Entity\OneOffIncome\IdentityInterface as OneOffIncomeIdentityInterface,
+    Event\MonthReportWasCreated
 };
 
 class MonthReportTest extends \PHPUnit_Framework_TestCase
@@ -31,6 +32,7 @@ class MonthReportTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($identity, $report->identity());
         $this->assertSame('2016-07', (string) $report);
         $this->assertSame(0, $report->amount()->value());
+        $this->assertCount(0, $report->recordedEvents());
         $incomeIdentity = $this->createMock(IncomeIdentityInterface::class);
         $incomeIdentity
             ->method('__toString')
@@ -79,5 +81,22 @@ class MonthReportTest extends \PHPUnit_Framework_TestCase
             )
         );
         $this->assertSame(842, $report->amount()->value());
+    }
+
+    public function testCreate()
+    {
+        $report = MonthReport::create(
+            $identity = $this->createMock(IdentityInterface::class),
+            $date = new \DateTimeImmutable('2016-07')
+        );
+
+        $this->assertSame($identity, $report->identity());
+        $this->assertSame('2016-07', (string) $report);
+        $this->assertSame(0, $report->amount()->value());
+        $this->assertCount(1, $report->recordedEvents());
+        $event = $report->recordedEvents()->first();
+        $this->assertInstanceOf(MonthReportWasCreated::class, $event);
+        $this->assertSame($identity, $event->identity());
+        $this->assertSame($date, $event->date());
     }
 }

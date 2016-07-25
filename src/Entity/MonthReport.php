@@ -7,12 +7,19 @@ use ExpenseManager\{
     Amount,
     Entity\MonthReport\IdentityInterface,
     Entity\Income\IdentityInterface as IncomeIdentityInterface,
-    Entity\FixedCost\IdentityInterface as FixedCostIdentityInterface
+    Entity\FixedCost\IdentityInterface as FixedCostIdentityInterface,
+    Event\MonthReportWasCreated
+};
+use Innmind\EventBus\{
+    ContainsRecordedEventsInterface,
+    EventRecorder
 };
 use Innmind\Immutable\Set;
 
-final class MonthReport
+final class MonthReport implements ContainsRecordedEventsInterface
 {
+    use EventRecorder;
+
     private $date;
     private $amount;
     private $appliedIncomes;
@@ -27,6 +34,16 @@ final class MonthReport
         $this->amount = new Amount(0);
         $this->appliedIncomes = new Set('string');
         $this->appliedFixedCosts = new Set('string');
+    }
+
+    public static function create(
+        IdentityInterface $identity,
+        \DateTimeImmutable $date
+    ): self {
+        $self = new self($identity, $date);
+        $self->record(new MonthReportWasCreated($identity, $date));
+
+        return $self;
     }
 
     public function identity(): IdentityInterface
