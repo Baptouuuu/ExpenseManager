@@ -54,10 +54,17 @@ class MonthReportTest extends \PHPUnit_Framework_TestCase
         $costIdentity
             ->method('__toString')
             ->willReturn('foo');
+        $cost = new FixedCost(
+            $costIdentity,
+            'foo',
+            new Amount(200),
+            new ApplyDay(1),
+            $this->createMock(CategoryIdentityInterface::class)
+        );
         $this->assertFalse($report->hasFixedCostBeenApplied($costIdentity));
-        $this->assertSame($report, $report->markFixedCostAsApplied($costIdentity));
+        $this->assertSame($report, $report->applyFixedCost($cost));
         $this->assertTrue($report->hasFixedCostBeenApplied($costIdentity));
-        $this->assertSame(42, $report->amount()->value());
+        $this->assertSame(-158, $report->amount()->value());
         $this->assertSame(
             $report,
             $report->applyExpense(
@@ -69,7 +76,7 @@ class MonthReportTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
-        $this->assertSame(-4158, $report->amount()->value());
+        $this->assertSame(-4358, $report->amount()->value());
         $this->assertSame(
             $report,
             $report->applyOneOffIncome(
@@ -80,7 +87,7 @@ class MonthReportTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
-        $this->assertSame(842, $report->amount()->value());
+        $this->assertSame(642, $report->amount()->value());
     }
 
     public function testCreate()

@@ -73,9 +73,14 @@ final class MonthReport implements ContainsRecordedEventsInterface
         return $this->appliedIncomes->contains((string) $identity);
     }
 
-    public function markFixedCostAsApplied(FixedCostIdentityInterface $identity): self
+    public function applyFixedCost(FixedCost $cost): self
     {
-        $this->appliedFixedCosts = $this->appliedFixedCosts->add((string) $identity);
+        if (!$this->hasFixedCostBeenApplied($cost->identity())) {
+            $this->appliedFixedCosts = $this
+                ->appliedFixedCosts
+                ->add((string) $cost->identity());
+            $this->amount = $this->amount->subtract($cost->amount());
+        }
 
         return $this;
     }
