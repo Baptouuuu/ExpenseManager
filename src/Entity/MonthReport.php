@@ -8,7 +8,8 @@ use ExpenseManager\{
     Entity\MonthReport\IdentityInterface,
     Entity\Income\IdentityInterface as IncomeIdentityInterface,
     Entity\FixedCost\IdentityInterface as FixedCostIdentityInterface,
-    Event\MonthReportWasCreated
+    Event\MonthReportWasCreated,
+    Event\MonthReport\IncomeHasBeenApplied
 };
 use Innmind\EventBus\{
     ContainsRecordedEventsInterface,
@@ -63,6 +64,10 @@ final class MonthReport implements ContainsRecordedEventsInterface
                 ->appliedIncomes
                 ->add((string) $income->identity());
             $this->amount = $this->amount->add($income->amount());
+            $this->record(new IncomeHasBeenApplied(
+                $this->identity,
+                $income->identity()
+            ));
         }
 
         return $this;
