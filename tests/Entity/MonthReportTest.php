@@ -18,7 +18,8 @@ use ExpenseManager\{
     Entity\OneOffIncome,
     Entity\OneOffIncome\IdentityInterface as OneOffIncomeIdentityInterface,
     Event\MonthReportWasCreated,
-    Event\MonthReport\IncomeHasBeenApplied
+    Event\MonthReport\IncomeHasBeenApplied,
+    Event\MonthReport\FixedCostHasBeenApplied
 };
 
 class MonthReportTest extends \PHPUnit_Framework_TestCase
@@ -73,6 +74,11 @@ class MonthReportTest extends \PHPUnit_Framework_TestCase
         $report->applyFixedCost($cost);
         $this->assertTrue($report->hasFixedCostBeenApplied($costIdentity));
         $this->assertSame(-158, $report->amount()->value());
+        $this->assertCount(2, $report->recordedEvents());
+        $event = $report->recordedEvents()->last();
+        $this->assertInstanceOf(FixedCostHasBeenApplied::class, $event);
+        $this->assertSame($identity, $event->identity());
+        $this->assertSame($costIdentity, $event->fixedCost());
         $this->assertSame(
             $report,
             $report->applyExpense(
