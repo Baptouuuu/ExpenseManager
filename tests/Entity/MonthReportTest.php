@@ -120,4 +120,24 @@ class MonthReportTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($identity, $event->identity());
         $this->assertSame($date, $event->date());
     }
+
+    /**
+     * @expectedException ExpenseManager\Exception\ApplyExpenseOnWrongMonthReportException
+     */
+    public function testThrowWhenApplyingExpenseOnWrongMonth()
+    {
+        $report = new MonthReport(
+            $this->createMock(IdentityInterface::class),
+            new \DateTimeImmutable('2016-07')
+        );
+
+        $report->applyExpense(
+            new Expense(
+                $this->createMock(ExpenseIdentityInterface::class),
+                new Amount(4200),
+                $this->createMock(CategoryIdentityInterface::class),
+                new \DateTimeImmutable('2016-05')
+            )
+        );
+    }
 }

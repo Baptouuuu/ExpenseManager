@@ -10,7 +10,8 @@ use ExpenseManager\{
     Entity\FixedCost\IdentityInterface as FixedCostIdentityInterface,
     Event\MonthReportWasCreated,
     Event\MonthReport\IncomeHasBeenApplied,
-    Event\MonthReport\FixedCostHasBeenApplied
+    Event\MonthReport\FixedCostHasBeenApplied,
+    Exception\ApplyExpenseOnWrongMonthReportException
 };
 use Innmind\EventBus\{
     ContainsRecordedEventsInterface,
@@ -102,6 +103,10 @@ final class MonthReport implements ContainsRecordedEventsInterface
 
     public function applyExpense(Expense $expense): self
     {
+        if ($expense->date()->format('Y-m') !== (string) $this) {
+            throw new ApplyExpenseOnWrongMonthReportException;
+        }
+
         $this->amount = $this->amount->subtract($expense->amount());
 
         return $this;
