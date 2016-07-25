@@ -41,10 +41,12 @@ final class MonthReport
 
     public function applyIncome(Income $income): self
     {
-        $this->appliedIncomes = $this
-            ->appliedIncomes
-            ->add((string) $income->identity());
-        $this->amount = $this->amount->add($income->amount());
+        if (!$this->hasIncomeBeenApplied($income->identity())) {
+            $this->appliedIncomes = $this
+                ->appliedIncomes
+                ->add((string) $income->identity());
+            $this->amount = $this->amount->add($income->amount());
+        }
 
         return $this;
     }
