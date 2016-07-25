@@ -48,6 +48,7 @@ class MonthReportTest extends \PHPUnit_Framework_TestCase
             $report,
             $report->applyIncome($income)
         );
+        $report->applyIncome($income);
         $this->assertTrue($report->hasIncomeBeenApplied($incomeIdentity));
         $this->assertSame(42, $report->amount()->value());
         $costIdentity = $this->createMock(FixedCostIdentityInterface::class);
@@ -63,6 +64,7 @@ class MonthReportTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertFalse($report->hasFixedCostBeenApplied($costIdentity));
         $this->assertSame($report, $report->applyFixedCost($cost));
+        $report->applyFixedCost($cost);
         $this->assertTrue($report->hasFixedCostBeenApplied($costIdentity));
         $this->assertSame(-158, $report->amount()->value());
         $this->assertSame(
