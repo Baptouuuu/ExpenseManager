@@ -21,7 +21,7 @@ final class CreateMonthReportHandler
     public function __invoke(CreateMonthReport $wished)
     {
         $this->repository->add(
-            new MonthReport(
+            MonthReport::create(
                 $wished->identity(),
                 new \DateTimeImmutable($wished->date())
             )

@@ -8,7 +8,8 @@ use ExpenseManager\{
     Command\CreateMonthReport,
     Repository\MonthReportRepositoryInterface,
     Entity\MonthReport,
-    Entity\MonthReport\IdentityInterface
+    Entity\MonthReport\IdentityInterface,
+    Event\MonthReportWasCreated
 };
 
 class CreateMonthReportHandlerTest extends \PHPUnit_Framework_TestCase
@@ -24,7 +25,9 @@ class CreateMonthReportHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('add')
             ->with($this->callback(function(MonthReport $report) use ($identity) {
                 return $report->identity() === $identity &&
-                    (string) $report === '2016-07';
+                    (string) $report === '2016-07' &&
+                    $report->recordedEvents()->count() === 1 &&
+                    $report->recordedEvents()->first() instanceof MonthReportWasCreated;
             }));
 
         $this->assertNull($handler(
