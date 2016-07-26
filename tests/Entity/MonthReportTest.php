@@ -20,7 +20,8 @@ use ExpenseManager\{
     Event\MonthReportWasCreated,
     Event\MonthReport\IncomeHasBeenApplied,
     Event\MonthReport\FixedCostHasBeenApplied,
-    Event\MonthReport\ExpenseHasBeenApplied
+    Event\MonthReport\ExpenseHasBeenApplied,
+    Event\MonthReport\OneOffIncomeHasBeenApplied
 };
 
 class MonthReportTest extends \PHPUnit_Framework_TestCase
@@ -100,7 +101,7 @@ class MonthReportTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             $report,
             $report->applyOneOffIncome(
-                new OneOffIncome(
+                $income = new OneOffIncome(
                     $this->createMock(OneOffIncomeIdentityInterface::class),
                     new Amount(5000),
                     new \DateTimeImmutable
@@ -108,6 +109,11 @@ class MonthReportTest extends \PHPUnit_Framework_TestCase
             )
         );
         $this->assertSame(642, $report->amount()->value());
+        $this->assertCount(4, $report->recordedEvents());
+        $event = $report->recordedEvents()->last();
+        $this->assertInstanceOf(OneOffIncomeHasBeenApplied::class, $event);
+        $this->assertSame($identity, $event->identity());
+        $this->assertSame($income->identity(), $event->oneOffIncome());
     }
 
     public function testCreate()
