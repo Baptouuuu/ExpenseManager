@@ -140,4 +140,23 @@ class MonthReportTest extends \PHPUnit_Framework_TestCase
             )
         );
     }
+
+    /**
+     * @expectedException ExpenseManager\Exception\ApplyOneOffIncomeOnWrongMonthReportException
+     */
+    public function testThrowWhenApplyingOneOffIncomeOnWrongMonth()
+    {
+        $report = new MonthReport(
+            $this->createMock(IdentityInterface::class),
+            new \DateTimeImmutable('2016-07')
+        );
+
+        $report->applyOneOffIncome(
+            new OneOffIncome(
+                $this->createMock(OneOffIncomeIdentityInterface::class),
+                new Amount(5000),
+                new \DateTimeImmutable('2016-05')
+            )
+        );
+    }
 }

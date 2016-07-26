@@ -11,7 +11,8 @@ use ExpenseManager\{
     Event\MonthReportWasCreated,
     Event\MonthReport\IncomeHasBeenApplied,
     Event\MonthReport\FixedCostHasBeenApplied,
-    Exception\ApplyExpenseOnWrongMonthReportException
+    Exception\ApplyExpenseOnWrongMonthReportException,
+    Exception\ApplyOneOffIncomeOnWrongMonthReportException
 };
 use Innmind\EventBus\{
     ContainsRecordedEventsInterface,
@@ -114,6 +115,10 @@ final class MonthReport implements ContainsRecordedEventsInterface
 
     public function applyOneOffIncome(OneOffIncome $income): self
     {
+        if ($income->date()->format('Y-m') !== (string) $this) {
+            throw new ApplyOneOffIncomeOnWrongMonthReportException;
+        }
+
         $this->amount = $this->amount->add($income->amount());
 
         return $this;
