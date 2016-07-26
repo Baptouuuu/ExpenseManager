@@ -11,6 +11,7 @@ use ExpenseManager\{
     Event\MonthReportWasCreated,
     Event\MonthReport\IncomeHasBeenApplied,
     Event\MonthReport\FixedCostHasBeenApplied,
+    Event\MonthReport\ExpenseHasBeenApplied,
     Exception\ApplyExpenseOnWrongMonthReportException,
     Exception\ApplyOneOffIncomeOnWrongMonthReportException
 };
@@ -109,6 +110,10 @@ final class MonthReport implements ContainsRecordedEventsInterface
         }
 
         $this->amount = $this->amount->subtract($expense->amount());
+        $this->record(new ExpenseHasBeenApplied(
+            $this->identity(),
+            $expense->identity()
+        ));
 
         return $this;
     }
