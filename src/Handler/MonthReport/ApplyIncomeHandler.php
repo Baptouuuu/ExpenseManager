@@ -6,8 +6,7 @@ namespace ExpenseManager\Handler\MonthReport;
 use ExpenseManager\{
     Command\MonthReport\ApplyIncome,
     Repository\MonthReportRepositoryInterface,
-    Repository\IncomeRepositoryInterface,
-    Exception\CantApplyIncomeTodayException
+    Repository\IncomeRepositoryInterface
 };
 
 final class ApplyIncomeHandler
@@ -25,15 +24,11 @@ final class ApplyIncomeHandler
 
     public function __invoke(ApplyIncome $wished)
     {
-        $income = $this->incomes->get($wished->income());
-
-        if ($income->applyDay()->value() !== (int) (new \DateTime)->format('j')) {
-            throw new CantApplyIncomeTodayException;
-        }
-
         $this
             ->repository
             ->get($wished->identity())
-            ->applyIncome($income);
+            ->applyIncome(
+                $this->incomes->get($wished->income())
+            );
     }
 }

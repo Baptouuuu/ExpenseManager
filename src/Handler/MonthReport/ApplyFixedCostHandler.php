@@ -6,8 +6,7 @@ namespace ExpenseManager\Handler\MonthReport;
 use ExpenseManager\{
     Command\MonthReport\ApplyFixedCost,
     Repository\MonthReportRepositoryInterface,
-    Repository\FixedCostRepositoryInterface,
-    Exception\CantApplyFixedCostTodayException
+    Repository\FixedCostRepositoryInterface
 };
 
 final class ApplyFixedCostHandler
@@ -25,15 +24,11 @@ final class ApplyFixedCostHandler
 
     public function __invoke(ApplyFixedCost $wished)
     {
-        $cost = $this->costs->get($wished->fixedCost());
-
-        if ($cost->applyDay()->value() !== (int) (new \DateTime)->format('j')) {
-            throw new CantApplyFixedCostTodayException;
-        }
-
         $this
             ->repository
             ->get($wished->identity())
-            ->applyFixedCost($cost);
+            ->applyFixedCost(
+                $this->costs->get($wished->fixedCost())
+            );
     }
 }

@@ -57,43 +57,4 @@ class ApplyFixedCostHandlerTest extends \PHPUnit_Framework_TestCase
         ));
         $this->assertTrue($report->hasFixedCostBeenApplied($fixedCost->identity()));
     }
-
-    /**
-     * @expectedException ExpenseManager\Exception\CantApplyFixedCostTodayException
-     */
-    public function testThrowWhenTryingToApplyFixedCostAnotherDayItIsSupposedTo()
-    {
-        $day = (int) (new \DateTime)->format('j') + 1;
-
-        if ($day > 28) {
-            $day = 1;
-        }
-
-        $handler = new ApplyFixedCostHandler(
-            $repo = $this->createMock(MonthReportRepositoryInterface::class),
-            $fixedCosts = $this->createMock(FixedCostRepositoryInterface::class)
-        );
-        $repo
-            ->method('get')
-            ->willReturn($report = new MonthReport(
-                $this->createMock(IdentityInterface::class),
-                new \DateTimeImmutable('2016-07')
-            ));
-        $fixedCosts
-            ->method('get')
-            ->willReturn($fixedCost = new FixedCost(
-                $this->createMock(FixedCostIdentityInterface::class),
-                'foo',
-                new Amount(42),
-                new ApplyDay($day),
-                $this->createMock(CategoryIdentityInterface::class)
-            ));
-
-        $handler(
-            new ApplyFixedCost(
-                $report->identity(),
-                $fixedCost->identity()
-            )
-        );
-    }
 }
