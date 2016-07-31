@@ -4,12 +4,12 @@ declare(strict_types = 1);
 namespace ExpenseManager\Handler;
 
 use ExpenseManager\{
-    Command\CreateMonthReport,
+    Command\CreateCurrentMonthReport,
     Repository\MonthReportRepositoryInterface,
     Entity\MonthReport
 };
 
-final class CreateMonthReportHandler
+final class CreateCurrentMonthReportHandler
 {
     private $repository;
 
@@ -18,12 +18,12 @@ final class CreateMonthReportHandler
         $this->repository = $repository;
     }
 
-    public function __invoke(CreateMonthReport $wished)
+    public function __invoke(CreateCurrentMonthReport $wished)
     {
         $this->repository->add(
             MonthReport::create(
                 $wished->identity(),
-                new \DateTimeImmutable($wished->date())
+                new \DateTimeImmutable(date('Y-m'))
             )
         );
     }

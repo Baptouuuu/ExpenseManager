@@ -4,19 +4,19 @@ declare(strict_types = 1);
 namespace Tests\ExpenseManager\Handler;
 
 use ExpenseManager\{
-    Handler\CreateMonthReportHandler,
-    Command\CreateMonthReport,
+    Handler\CreateCurrentMonthReportHandler,
+    Command\CreateCurrentMonthReport,
     Repository\MonthReportRepositoryInterface,
     Entity\MonthReport,
     Entity\MonthReport\IdentityInterface,
     Event\MonthReportWasCreated
 };
 
-class CreateMonthReportHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateCurrentMonthReportHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testInterface()
     {
-        $handler = new CreateMonthReportHandler(
+        $handler = new CreateCurrentMonthReportHandler(
             $repo = $this->createMock(MonthReportRepositoryInterface::class)
         );
         $identity = $this->createMock(IdentityInterface::class);
@@ -25,16 +25,13 @@ class CreateMonthReportHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('add')
             ->with($this->callback(function(MonthReport $report) use ($identity) {
                 return $report->identity() === $identity &&
-                    (string) $report === '2016-07' &&
+                    (string) $report === date('Y-m') &&
                     $report->recordedEvents()->count() === 1 &&
                     $report->recordedEvents()->first() instanceof MonthReportWasCreated;
             }));
 
         $this->assertNull($handler(
-            new CreateMonthReport(
-                $identity,
-                '2016-07-01'
-            )
+            new CreateCurrentMonthReport($identity)
         ));
     }
 }
